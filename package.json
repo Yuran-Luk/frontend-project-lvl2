@@ -1,0 +1,19 @@
+{
+  "name": "yuran_project_lvl2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yuran-Luk/frontend-project-lvl2.git"
+  },
+  "author": "Yuran B",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yuran-Luk/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/Yuran-Luk/frontend-project-lvl2#readme"
+}
