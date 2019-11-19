@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 import commander from 'commander';
 
-commander.version('0.0.0');
+commander.version('0.0.0')
+  .description('Compares two configuration files and shows a difference.')
+  .option('-f, --format [type]', 'Output format')
+  .arguments('<firstConfig> <secondConfig>');
+
 commander.parse(process.argv);
