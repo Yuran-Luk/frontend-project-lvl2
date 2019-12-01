@@ -1,13 +1,13 @@
 install:
-  npm install
+	npm install
 
 publish:
-  npm publish --dry-run
+	npm publish --dry-run
 
 push:
-  git push -u origin master
+	git push -u origin master
 
 lint:
-  npx eslint .
+	npx eslint .
 
 .PHONY: test
