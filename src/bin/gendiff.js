@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import commander from 'commander';
 import fs from 'fs';
-import diff from '..';
+import parse from '..';
+import render from '../utils';
 
 commander.version('0.0.0')
   .description('Compares two configuration files and shows a difference.')
@@ -10,7 +11,7 @@ commander.version('0.0.0')
   .action((firstConfig, secondConfig) => {
     const first = JSON.parse(fs.readFileSync(firstConfig));
     const second = JSON.parse(fs.readFileSync(secondConfig));
-    console.log(diff(first, second));
+    console.log(render(parse(first, second)));
   });
 
 commander.parse(process.argv);

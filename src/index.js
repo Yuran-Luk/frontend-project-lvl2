@@ -1,22 +1,36 @@
 import _ from 'lodash';
 
-const diff = (before, after) => {
-  const deleted = Object.entries(before)
-    .filter(([key]) => !_.has(after, key))
-    .map(([key, value]) => `- ${key}: ${value}`);
+const diffKeysActions = [
+  {
+    action: (key, after) => [[' ', key, after[key]]],
+    check: (key, after, before) => (
+      _.has(after, key) && before[key] === after[key]
+    ),
+  },
+  {
+    action: (key, after, before) => [
+      ['-', key, before[key]],
+      ['+', key, after[key]],
+    ],
+    check: (key, after) => _.has(after, key),
+  },
+];
 
-  const added = Object.entries(after)
-    .filter(([key]) => !_.has(before, key))
-    .map(([key, value]) => `+ ${key}: ${value}`);
+const getDiffKeysActions = (key, after, before) => (
+  diffKeysActions.find(({ check }) => check(key, after, before))
+);
 
-  const di = Object.entries(after)
-    .filter(([key]) => _.has(before, key))
-    .reduce((acc, [key, value]) => {
-      const newAcc = value === before[key] ? acc
-        : [...acc, `- ${key}: ${before[key]}`, `+ ${key}: ${value}`];
-      return newAcc;
-    }, []);
-  return [...di, ...added, ...deleted].join('\n');
+export default (before, after) => {
+  const added = Object.keys(after)
+    .filter((key) => !_.has(before, key))
+    .map((key) => ['+', key, after[key]]);
+  const deleted = Object.keys(before)
+    .filter((key) => !_.has(after, key))
+    .map((key) => ['-', key, before[key]]);
+  return Object.keys(before)
+    .filter((key) => _.has(after, key))
+    .reduce((acc, key) => {
+      const { action } = getDiffKeysActions(key, after, before);
+      return [...action(key, after, before), ...acc];
+    }, [...added, ...deleted]);
 };
-
-export default diff;
