@@ -1,36 +1,29 @@
-import _ from 'lodash';
+import path from 'path';
+import fs from 'fs';
+import yaml from 'js-yaml';
+import parse from './parsers';
+import render from './utils';
 
-const diffKeysActions = [
+const parsers = [
   {
-    action: (key, after) => [[' ', key, after[key]]],
-    check: (key, after, before) => (
-      _.has(after, key) && before[key] === after[key]
-    ),
+    action: (pathToFile) => JSON.parse(fs.readFileSync(pathToFile)),
+    check: (pathToFile) => path.extname(pathToFile) === '.json',
   },
   {
-    action: (key, after, before) => [
-      ['-', key, before[key]],
-      ['+', key, after[key]],
-    ],
-    check: (key, after) => _.has(after, key),
+    action: (pathToFile) => yaml.safeLoad(fs.readFileSync(pathToFile)),
+    check: (pathToFile) => path.extname(pathToFile) === '.yml',
   },
 ];
 
-const getDiffKeysActions = (key, after, before) => (
-  diffKeysActions.find(({ check }) => check(key, after, before))
-);
+const getParseAction = (pathToFile) => parsers.find(({ check }) => check(pathToFile));
 
-export default (before, after) => {
-  const added = Object.keys(after)
-    .filter((key) => !_.has(before, key))
-    .map((key) => ['+', key, after[key]]);
-  const deleted = Object.keys(before)
-    .filter((key) => !_.has(after, key))
-    .map((key) => ['-', key, before[key]]);
-  return Object.keys(before)
-    .filter((key) => _.has(after, key))
-    .reduce((acc, key) => {
-      const { action } = getDiffKeysActions(key, after, before);
-      return [...action(key, after, before), ...acc];
-    }, [...added, ...deleted]);
+export default (pathBefore, pathAfter) => {
+  if (path.extname(pathBefore) !== path.extname(pathAfter)) {
+    return '!Err';
+  }
+  const { action } = getParseAction(pathBefore);
+  const before = action(pathBefore);
+  const after = action(pathAfter);
+  const ast = parse(before, after);
+  return render(ast);
 };
