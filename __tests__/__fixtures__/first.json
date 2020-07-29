@@ -1,5 +1,9 @@
 {
   "a": "3",
   "b": "2",
-  "c": "3"
+  "c": "3",
+  "bear": {
+    "polar": "white",
+    "russian": "brown"
+  }
 }

@@ -3,9 +3,9 @@ import fs from 'fs';
 import yaml from 'js-yaml';
 import ini from 'ini';
 import parse from './parsers';
-import render from './utils';
+import getRender from './formatters/render';
 
-const parsers = [
+const parseActions = [
   {
     action: (pathToFile) => JSON.parse(fs.readFileSync(pathToFile)),
     check: (pathToFile) => path.extname(pathToFile) === '.json',
@@ -20,9 +20,9 @@ const parsers = [
   },
 ];
 
-const getParseAction = (pathToFile) => parsers.find(({ check }) => check(pathToFile));
+const getParseAction = (pathToFile) => parseActions.find(({ check }) => check(pathToFile));
 
-export default (pathBefore, pathAfter) => {
+export default (pathBefore, pathAfter, format) => {
   if (path.extname(pathBefore) !== path.extname(pathAfter)) {
     return '!Err';
   }
@@ -30,5 +30,6 @@ export default (pathBefore, pathAfter) => {
   const before = action(pathBefore);
   const after = action(pathAfter);
   const ast = parse(before, after);
+  const render = getRender(format);
   return render(ast);
 };

@@ -2,6 +2,11 @@
     "a": "3",
     "b": "5",
     "new": "2",
-    "d": "3"
+    "d": "3",
+    "bear": {
+        "polar": "white",
+        "russian": "brown",
+        "asian": "panda"
+    }
 } 
   

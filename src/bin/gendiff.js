@@ -2,12 +2,13 @@
 import commander from 'commander';
 import diff from '..';
 
-commander.version('0.0.0')
+commander.version('0.0.1')
   .description('Compares two configuration files and shows a difference.')
   .option('-f, --format [type]', 'Output format')
   .arguments('<firstConfig> <secondConfig>')
+  .option('-f, --format [type]', 'output format', 'diff')
   .action((firstConfig, secondConfig) => {
-    console.log(diff(firstConfig, secondConfig));
+    console.log(diff(firstConfig, secondConfig, commander.format));
   });
 
 commander.parse(process.argv);

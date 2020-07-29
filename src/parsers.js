@@ -1,36 +1,73 @@
 import _ from 'lodash';
 
-const diffKeysActions = [
-  {
-    action: (key, after) => [[' ', key, after[key]]],
-    check: (key, after, before) => (
-      _.has(after, key) && before[key] === after[key]
-    ),
-  },
-  {
-    action: (key, after, before) => [
-      ['-', key, before[key]],
-      ['+', key, after[key]],
-    ],
-    check: (key, after) => _.has(after, key),
-  },
-];
-
-const getDiffKeysAction = (key, after, before) => (
-  diffKeysActions.find(({ check }) => check(key, after, before))
-);
-
-export default (before, after) => {
-  const added = Object.keys(after)
-    .filter((key) => !_.has(before, key))
-    .map((key) => ['+', key, after[key]]);
-  const deleted = Object.keys(before)
-    .filter((key) => !_.has(after, key))
-    .map((key) => ['-', key, before[key]]);
-  return Object.keys(before)
-    .filter((key) => _.has(after, key))
-    .reduce((acc, key) => {
-      const { action } = getDiffKeysAction(key, after, before);
-      return [...action(key, after, before), ...acc];
-    }, [...added, ...deleted]);
+const getNodeType = (value, other) => {
+  const isNodeValue = _.isObject(value);
+  const isNodeyOther = _.isObject(other);
+  if (!other) {
+    return isNodeValue ? 'node' : 'leaf';
+  }
+  if (isNodeValue && !isNodeyOther) {
+    return 'node/leaf';
+  }
+  if (!isNodeValue && isNodeyOther) {
+    return 'leaf/node';
+  }
+  return 'leaf';
 };
+
+const diff = (before, after) => {
+  const keys = _.uniq([..._.keys(before), ..._.keys(after)]);
+  const buildAst = keys.map((key) => {
+    const node = {
+      name: key,
+      type: '',
+      status: '',
+    };
+    if (!_.has(after, key)) {
+      node.status = 'delete';
+      node.type = getNodeType(before[key]);
+      if (node.type === 'node') {
+        node.children = diff(before[key], {});
+      } else {
+        node.value = before[key];
+      }
+      return node;
+    }
+    if (!_.has(before, key)) {
+      node.status = 'add';
+      node.type = getNodeType(after[key]);
+      if (node.type === 'node') {
+        node.children = diff({}, after[key]);
+      } else {
+        node.value = after[key];
+      }
+      return node;
+    }
+    if (_.isObject(before[key]) && _.isObject(after[key])) {
+      node.status = _.isEqual(before[key], after[key]) ? 'unchanged' : 'updated';
+      node.type = 'node';
+      node.children = diff(before[key], after[key]);
+      return node;
+    }
+    if (_.isEqual(before[key], after[key])) {
+      node.status = 'unchanged';
+      node.type = getNodeType(after[key]);
+      if (node.type === 'node') {
+        node.children = diff({}, after[key]);
+      } else {
+        node.value = after[key];
+      }
+      return node;
+    }
+    node.status = 'updated';
+    node.type = getNodeType(before[key], after[key]);
+    node.beforeValue = getNodeType(before[key]) === 'node'
+      ? diff(before[key], before[key]) : before[key];
+    node.afterValue = getNodeType(after[key]) === 'leaf'
+      ? after[key] : diff(after[key], after[key]);
+    return node;
+  });
+  return buildAst;
+};
+
+export default diff;
