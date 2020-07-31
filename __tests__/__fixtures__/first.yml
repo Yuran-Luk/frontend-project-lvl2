@@ -1,0 +1,13 @@
+---
+common:
+  setting1: 22
+  setting2: red  
+  setting6:
+    key: value
+group1:
+  local: city
+group2:
+  baz: bas
+  foo: bar
+group3:
+  foo: fighters

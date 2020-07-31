@@ -1,0 +1,12 @@
+---
+common:
+  setting1: 21
+  setting2: blue 
+  setting6:
+    key: value
+    anotherkey: anothervalue
+group1:
+  local: airport
+group2:
+  baz: bas
+  foo: bar
