@@ -9,12 +9,12 @@ export default (diff) => {
               return iter(node.children, `${path}${node.name}.`);
             }
             if (node.type === 'node/leaf') {
-              return `Property '${path}${node.name}' was changed from '[complex value]' to '${node.afterValue}'`;
+              return `Property '${path}${node.name}' was updated from '[complex value]' to '${node.afterValue}'`;
             }
             if (node.type === 'leaf/node') {
-              return `Property '${path}${node.name}' was changed from '${node.beforeValue}' to '[complex value]'`;
+              return `Property '${path}${node.name}' was updated from '${node.beforeValue}' to '[complex value]'`;
             }
-            return `Property '${path}${node.name}' was changed from ${node.beforeValue} to ${node.afterValue}`;
+            return `Property '${path}${node.name}' was updated from '${node.beforeValue}' to '${node.afterValue}'`;
           case 'delete':
             return `Property '${path}${node.name}' was deleted`;
           case 'add':

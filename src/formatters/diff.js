@@ -20,6 +20,9 @@ const render = (diff) => {
         case 'leaf':
           return `${tab}${toStringLeaf(node, tab)}`;
         case 'node':
+          if (node.status === 'delete') {
+            return `${tab}-${node.name}: {\n${iter(node.children, `${tab}  `)}\n${tab} }`;
+          }
           return `${tab} ${node.name}: {\n${iter(node.children, `${tab}  `)}\n${tab} }`;
         case 'node/leaf':
           return `${tab}-${node.name}: {\n${iter(node.beforeValue, `${tab}  `)}\n${tab} }\n${tab}+${node.name}: ${node.afterValue}`;

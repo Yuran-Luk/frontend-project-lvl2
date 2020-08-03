@@ -27,7 +27,7 @@ const diff = (before, after) => {
       node.status = 'delete';
       node.type = getNodeType(before[key]);
       if (node.type === 'node') {
-        node.children = diff(before[key], {});
+        node.children = diff(before[key], before[key]);
       } else {
         node.value = before[key];
       }
@@ -37,7 +37,7 @@ const diff = (before, after) => {
       node.status = 'add';
       node.type = getNodeType(after[key]);
       if (node.type === 'node') {
-        node.children = diff({}, after[key]);
+        node.children = diff(after[key], after[key]);
       } else {
         node.value = after[key];
       }

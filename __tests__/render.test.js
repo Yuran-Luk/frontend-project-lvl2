@@ -1,5 +1,6 @@
 import fs from 'fs';
 import ini from 'ini';
+import yaml from 'js-yaml';
 import render from '../src/formatters/render';
 import parse from '../src/parsers';
 
@@ -46,12 +47,12 @@ test('JSONdiff', () => {
 });
 
 test('JSONplain', () => {
-  expect(render('plain')(treeJ)).toEqual(`Property 'a.a1' was changed from 38 to 40
-Property 'a.a3' was changed from 36 to 38
-Property 'a.a4' was changed from '33' to '[complex value]'
-Property 'b' was changed from '[complex value]' to '99'
+  expect(render('plain')(treeJ)).toEqual(`Property 'a.a1' was updated from 38 to 40
+Property 'a.a3' was updated from 36 to 38
+Property 'a.a4' was updated from '33' to '[complex value]'
+Property 'b' was updated from '[complex value]' to '99'
 Property 'c' was deleted
-Property 'r.r2.ra' was changed from 4 to 8
+Property 'r.r2.ra' was updated from 4 to 8
 Property 'r.r2.rb' was deleted
 Property 'p' was added with value: '46'`);
 });
@@ -86,10 +87,22 @@ test('INIdiff', () => {
 });
 
 test('INIplain', () => {
-  expect(render('plain')(treeI)).toEqual(`Property 'group.first' was changed from 777 to Value
-Property 'group.third.name' was changed from Iten to Donald
-Property 'iter.key' was changed from undefined to 561
-Property 'iter.garage.lamborgini' was changed from aventador to huracan
+  expect(render('plain')(treeI)).toEqual(`Property 'group.first' was updated from 777 to Value
+Property 'group.third.name' was updated from Iten to Donald
+Property 'iter.key' was updated from undefined to 561
+Property 'iter.garage.lamborgini' was updated from aventador to huracan
 Property 'iter.garage.ferrari' was added with value: 'pista'
 Property 'iter.type' was added with value: 'true'`);
+});
+
+const beforeY = yaml.safeLoad(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/first.yml'));
+const afterY = yaml.safeLoad(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/second.yml'));
+const treeY = parse(beforeY, afterY);
+
+test('YML', () => {
+  expect(render('plain')(treeY)).toEqual(`Property 'common.setting1' was updated from 22 to 21
+Property 'common.setting2' was updated from red to blue
+Property 'common.setting6.anotherkey' was added with value: 'anothervalue'
+Property 'group1.local' was updated from city to airport
+Property 'group3' was deleted`);
 });
