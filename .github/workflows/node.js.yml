@@ -27,9 +27,8 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     env:
-        CI: true
+      CI: true
     - name: Run linter
-      # Run Linter
       run: |
         make lint
     - name: Test & publish code coverage
