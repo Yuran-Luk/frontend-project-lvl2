@@ -47,12 +47,12 @@ test('JSONdiff', () => {
 });
 
 test('JSONplain', () => {
-  expect(render('plain')(treeJ)).toEqual(`Property 'a.a1' was updated from 38 to 40
-Property 'a.a3' was updated from 36 to 38
+  expect(render('plain')(treeJ)).toEqual(`Property 'a.a1' was updated from '38' to '40'
+Property 'a.a3' was updated from '36' to '38'
 Property 'a.a4' was updated from '33' to '[complex value]'
 Property 'b' was updated from '[complex value]' to '99'
 Property 'c' was deleted
-Property 'r.r2.ra' was updated from 4 to 8
+Property 'r.r2.ra' was updated from '4' to '8'
 Property 'r.r2.rb' was deleted
 Property 'p' was added with value: '46'`);
 });
@@ -87,10 +87,10 @@ test('INIdiff', () => {
 });
 
 test('INIplain', () => {
-  expect(render('plain')(treeI)).toEqual(`Property 'group.first' was updated from 777 to Value
-Property 'group.third.name' was updated from Iten to Donald
-Property 'iter.key' was updated from undefined to 561
-Property 'iter.garage.lamborgini' was updated from aventador to huracan
+  expect(render('plain')(treeI)).toEqual(`Property 'group.first' was updated from '777' to 'Value'
+Property 'group.third.name' was updated from 'Iten' to 'Donald'
+Property 'iter.key' was updated from 'undefined' to '561'
+Property 'iter.garage.lamborgini' was updated from 'aventador' to 'huracan'
 Property 'iter.garage.ferrari' was added with value: 'pista'
 Property 'iter.type' was added with value: 'true'`);
 });
@@ -100,9 +100,9 @@ const afterY = yaml.safeLoad(fs.readFileSync('/home/yuran/Projects/frontend-proj
 const treeY = parse(beforeY, afterY);
 
 test('YML', () => {
-  expect(render('plain')(treeY)).toEqual(`Property 'common.setting1' was updated from 22 to 21
-Property 'common.setting2' was updated from red to blue
+  expect(render('plain')(treeY)).toEqual(`Property 'common.setting1' was updated from '22' to '21'
+Property 'common.setting2' was updated from 'red' to 'blue'
 Property 'common.setting6.anotherkey' was added with value: 'anothervalue'
-Property 'group1.local' was updated from city to airport
+Property 'group1.local' was updated from 'city' to 'airport'
 Property 'group3' was deleted`);
 });
