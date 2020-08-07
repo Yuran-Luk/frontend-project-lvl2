@@ -1,13 +1,10 @@
 ---
+
 plugins:
   - jest
-  - babel
-
+  
 env:
   node: true
-  jest: true
-
-parser: babel-eslint
 
 extends:
   - 'airbnb-base'
@@ -15,3 +12,8 @@ extends:
 
 rules:
   no-console: 0
+  import/extensions: 0
+
+parserOptions:
+  ecmaVersion: 2020
+  

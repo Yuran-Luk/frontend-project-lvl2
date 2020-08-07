@@ -1,12 +1,17 @@
 ---
-common:
-  setting1: 21
-  setting2: blue 
-  setting6:
+common: 
+  follow: false
+  setting1: Value 1
+  setting3: 
     key: value
-    anotherkey: anothervalue
-group1:
-  local: airport
-group2:
-  baz: bas
+  setting5: 
+    key5: value5
+group1: 
   foo: bar
+  baz: bars
+  nest: str
+group3: 
+  fee: 100500
+  deep: 
+    id: 
+      number: 45

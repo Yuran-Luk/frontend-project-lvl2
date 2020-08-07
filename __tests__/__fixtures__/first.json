@@ -1,25 +1,20 @@
 {
-  "a": {
-    "a1": 38,
-    "a2": 33,
-    "a3": 36,
-    "a4": 33
-  },
-  "b": {
-    "b1": 26,
-    "b2": 22
-  },
-  "c": 77,
-  "k": {
-    "k1": 26,
-    "k2": 22
-  },
-  "r": {
-    "r1": 26,
-    "r2": {
-      "ra": 4,
-      "rb": 2
+  "common": {
+    "setting1": "Value 1",
+    "setting2": 200,
+    "setting3": true,
+    "setting6": {
+      "key": "value",
+      "doge": {
+        "wow": "too much"
+      }
     }
   },
-  "t": 50
+  "group1": {
+    "baz": "bas",
+    "foo": "bar",
+    "nest": {
+      "key": "value"
+    }
+  }
 }

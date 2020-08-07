@@ -1,60 +1,73 @@
+/* eslint-disable no-underscore-dangle */
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import ini from 'ini';
 import yaml from 'js-yaml';
 import render from '../src/formatters/render';
 import parse from '../src/parsers';
 
+const expectedDiff = `{
+     common: {
+         setting1: Value 1
+       - setting2: 200
+       - setting3: true
+       + setting3: {
+             key: value
+         }
+       - setting6: {
+             key: value
+             doge: {
+                 wow: too much
+             }
+         }
+       + follow: false
+       + setting5: {
+             key5: value5
+         }
+     }
+     group1: {
+       - baz: bas
+       + baz: bars
+         foo: bar
+       - nest: {
+             key: value
+         }
+       + nest: str
+     }
+   + group3: {
+         fee: 100500
+         deep: {
+             id: {
+                 number: 45
+             }
+         }
+     }
+}`;
 
-const beforeJ = JSON.parse(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/first.json'));
-const afterJ = JSON.parse(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/second.json'));
+const expectedPlain = `Property 'common.setting2' was deleted
+Property 'common.setting3' was updated from 'true' to '[complex value]'
+Property 'common.setting6' was deleted
+Property 'common.follow' was added with value: 'false'
+Property 'common.setting5' was added with value: '[complex value]'
+Property 'group1.baz' was updated from 'bas' to 'bars'
+Property 'group1.nest' was updated from '[complex value]' to 'str'
+Property 'group3' was added with value: '[complex value]'`;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const getPath = (fileName) => path.join(__dirname, '__fixtures__', fileName);
+
+const beforeJ = JSON.parse(fs.readFileSync(getPath('first.json'), 'utf-8'));
+const afterJ = JSON.parse(fs.readFileSync(getPath('second.json'), 'utf-8'));
 const treeJ = parse(beforeJ, afterJ);
 
 test('JSONdiff', () => {
-  expect(render('diff')(treeJ)).toEqual(`{
-   a: {
-    -a1: 38
-    +a1: 40
-     a2: 33
-    -a3: 36
-    +a3: 38
-    -a4: 33
-    +a4: {
-       a41: 4
-       a42: 6
-     }
-   }
-  -b: {
-     b1: 26
-     b2: 22
-   }
-  +b: 99
-  -c: 77
-   k: {
-     k1: 26
-     k2: 22
-   }
-   r: {
-     r1: 26
-     r2: {
-      -ra: 4
-      +ra: 8
-      -rb: 2
-     }
-   }
-   t: 50
-  +p: 46
-}`);
+  expect(render('diff')(treeJ)).toEqual(expectedDiff);
 });
 
 test('JSONplain', () => {
-  expect(render('plain')(treeJ)).toEqual(`Property 'a.a1' was updated from '38' to '40'
-Property 'a.a3' was updated from '36' to '38'
-Property 'a.a4' was updated from '33' to '[complex value]'
-Property 'b' was updated from '[complex value]' to '99'
-Property 'c' was deleted
-Property 'r.r2.ra' was updated from '4' to '8'
-Property 'r.r2.rb' was deleted
-Property 'p' was added with value: '46'`);
+  expect(render('plain')(treeJ)).toEqual(expectedPlain);
 });
 
 const beforeI = ini.parse(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/first.ini', 'utf-8'));
@@ -62,47 +75,21 @@ const afterI = ini.parse(fs.readFileSync('/home/yuran/Projects/frontend-project-
 const treeI = parse(beforeI, afterI);
 
 test('INIdiff', () => {
-  expect(render('diff')(treeI)).toEqual(`{
-   group: {
-    -first: 777
-    +first: Value
-     second: none
-     third: {
-      -name: Iten
-      +name: Donald
-       mail: true
-     }
-   }
-   iter: {
-    -key: undefined
-    +key: 561
-     garage: {
-      -lamborgini: aventador
-      +lamborgini: huracan
-      +ferrari: pista
-     }
-    +type: true
-   }
-}`);
+  expect(render('diff')(treeI)).toEqual(expectedDiff);
 });
 
 test('INIplain', () => {
-  expect(render('plain')(treeI)).toEqual(`Property 'group.first' was updated from '777' to 'Value'
-Property 'group.third.name' was updated from 'Iten' to 'Donald'
-Property 'iter.key' was updated from 'undefined' to '561'
-Property 'iter.garage.lamborgini' was updated from 'aventador' to 'huracan'
-Property 'iter.garage.ferrari' was added with value: 'pista'
-Property 'iter.type' was added with value: 'true'`);
+  expect(render('plain')(treeI)).toEqual(expectedPlain);
 });
 
 const beforeY = yaml.safeLoad(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/first.yml'));
 const afterY = yaml.safeLoad(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/second.yml'));
 const treeY = parse(beforeY, afterY);
 
-test('YML', () => {
-  expect(render('plain')(treeY)).toEqual(`Property 'common.setting1' was updated from '22' to '21'
-Property 'common.setting2' was updated from 'red' to 'blue'
-Property 'common.setting6.anotherkey' was added with value: 'anothervalue'
-Property 'group1.local' was updated from 'city' to 'airport'
-Property 'group3' was deleted`);
+test('YMLdiff', () => {
+  expect(render('diff')(treeY)).toEqual(expectedDiff);
+});
+
+test('YMLplain', () => {
+  expect(render('plain')(treeY)).toEqual(expectedPlain);
 });

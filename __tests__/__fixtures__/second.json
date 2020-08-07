@@ -1,25 +1,27 @@
 {
-    "a": {
-      "a1": 40,
-      "a2": 33,
-      "a3": 38,
-      "a4": {
-        "a41": 4,
-        "a42": 6
+  "common": {
+    "follow": false,
+    "setting1": "Value 1",
+    "setting3": {
+      "key": "value"
+    },
+    "setting5": {
+      "key5": "value5"
+    }
+  },
+
+  "group1": {
+    "foo": "bar",
+    "baz": "bars",
+    "nest": "str"
+  },
+
+  "group3": {
+    "fee": 100500,
+    "deep": {
+      "id": {
+        "number": 45
       }
-    },
-    "b": 99,
-    "k": {
-      "k1": 26,
-      "k2": 22
-    },
-    "r": {
-      "r1": 26,
-      "r2": {
-        "ra": 8
-      }
-    },
-    "p": 46,
-    "t": 50
+    }
   }
-  
+}
