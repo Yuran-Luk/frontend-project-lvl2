@@ -70,8 +70,8 @@ test('JSONplain', () => {
   expect(render('plain')(treeJ)).toEqual(expectedPlain);
 });
 
-const beforeI = ini.parse(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/first.ini', 'utf-8'));
-const afterI = ini.parse(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/second.ini', 'utf-8'));
+const beforeI = ini.parse(fs.readFileSync(getPath('first.ini'), 'utf-8'));
+const afterI = ini.parse(fs.readFileSync(getPath('second.ini'), 'utf-8'));
 const treeI = parse(beforeI, afterI);
 
 test('INIdiff', () => {
@@ -82,8 +82,8 @@ test('INIplain', () => {
   expect(render('plain')(treeI)).toEqual(expectedPlain);
 });
 
-const beforeY = yaml.safeLoad(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/first.yml'));
-const afterY = yaml.safeLoad(fs.readFileSync('/home/yuran/Projects/frontend-project-lvl2/__tests__/__fixtures__/second.yml'));
+const beforeY = yaml.safeLoad(fs.readFileSync(getPath('first.yml'), 'utf-8'));
+const afterY = yaml.safeLoad(fs.readFileSync(getPath('second.yml'), 'utf-8'));
 const treeY = parse(beforeY, afterY);
 
 test('YMLdiff', () => {
