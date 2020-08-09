@@ -1,0 +1,147 @@
+[
+ {
+  "name": "common",
+  "type": "node",
+  "status": "updated",
+  "children": [
+   {
+    "name": "setting1",
+    "type": "leaf",
+    "status": "unchanged",
+    "value": "Value 1"
+   },
+   {
+    "name": "setting2",
+    "type": "leaf",
+    "status": "delete",
+    "value": 200
+   },
+   {
+    "name": "setting3",
+    "type": "leaf/node",
+    "status": "updated",
+    "beforeValue": true,
+    "afterValue": [
+     {
+      "name": "key",
+      "type": "leaf",
+      "status": "unchanged",
+      "value": "value"
+     }
+    ]
+   },
+   {
+    "name": "setting6",
+    "type": "node",
+    "status": "delete",
+    "children": [
+     {
+      "name": "key",
+      "type": "leaf",
+      "status": "unchanged",
+      "value": "value"
+     },
+     {
+      "name": "doge",
+      "type": "node",
+      "status": "unchanged",
+      "children": [
+       {
+        "name": "wow",
+        "type": "leaf",
+        "status": "unchanged",
+        "value": "too much"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "follow",
+    "type": "leaf",
+    "status": "add",
+    "value": false
+   },
+   {
+    "name": "setting5",
+    "type": "node",
+    "status": "add",
+    "children": [
+     {
+      "name": "key5",
+      "type": "leaf",
+      "status": "unchanged",
+      "value": "value5"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "group1",
+  "type": "node",
+  "status": "updated",
+  "children": [
+   {
+    "name": "baz",
+    "type": "leaf",
+    "status": "updated",
+    "beforeValue": "bas",
+    "afterValue": "bars"
+   },
+   {
+    "name": "foo",
+    "type": "leaf",
+    "status": "unchanged",
+    "value": "bar"
+   },
+   {
+    "name": "nest",
+    "type": "node/leaf",
+    "status": "updated",
+    "beforeValue": [
+     {
+      "name": "key",
+      "type": "leaf",
+      "status": "unchanged",
+      "value": "value"
+     }
+    ],
+    "afterValue": "str"
+   }
+  ]
+ },
+ {
+  "name": "group3",
+  "type": "node",
+  "status": "add",
+  "children": [
+   {
+    "name": "fee",
+    "type": "leaf",
+    "status": "unchanged",
+    "value": 100500
+   },
+   {
+    "name": "deep",
+    "type": "node",
+    "status": "unchanged",
+    "children": [
+     {
+      "name": "id",
+      "type": "node",
+      "status": "unchanged",
+      "children": [
+       {
+        "name": "number",
+        "type": "leaf",
+        "status": "unchanged",
+        "value": 45
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]
