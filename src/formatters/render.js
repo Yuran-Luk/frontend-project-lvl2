@@ -1,6 +1,6 @@
-import diff from './diff';
-import plain from './plain';
-import jsonRender from './jsonRend';
+import diff from './diff.js';
+import plain from './plain.js';
+import jsonRender from './jsonRend.js';
 
 export default (type) => {
   switch (type) {

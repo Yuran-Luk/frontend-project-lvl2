@@ -2,8 +2,8 @@ import path from 'path';
 import fs from 'fs';
 import yaml from 'js-yaml';
 import ini from 'ini';
-import parse from './src/parsers';
-import getRender from './src/formatters/render';
+import parse from './src/parsers.js';
+import getRender from './src/formatters/render.js';
 
 const parseActions = [
   {
