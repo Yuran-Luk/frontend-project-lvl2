@@ -2,10 +2,7 @@
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import ini from 'ini';
-import yaml from 'js-yaml';
-import render from '../src/formatters/render';
-import parse from '../src/parsers';
+import gendiff from '..';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,42 +12,26 @@ const expectedDiff = fs.readFileSync(getPath('diff.txt'), 'utf-8');
 const expectedPlain = fs.readFileSync(getPath('plain.txt'), 'utf-8');
 const expectedJSON = fs.readFileSync(getPath('json.txt'), 'utf-8');
 
-const beforeJ = JSON.parse(fs.readFileSync(getPath('first.json'), 'utf-8'));
-const afterJ = JSON.parse(fs.readFileSync(getPath('second.json'), 'utf-8'));
-const treeJ = parse(beforeJ, afterJ);
-
-test('JSONdiff', () => {
-  expect(render('diff')(treeJ)).toEqual(expectedDiff);
+test('JSON', () => {
+  const pathBefore = getPath('first.json');
+  const pathAfter = getPath('second.json');
+  expect(gendiff(pathBefore, pathAfter, 'diff')).toEqual(expectedDiff);
+  expect(gendiff(pathBefore, pathAfter, 'plain')).toEqual(expectedPlain);
+  expect(gendiff(pathBefore, pathAfter, 'json')).toEqual(expectedJSON);
 });
 
-test('JSONplain', () => {
-  expect(render('plain')(treeJ)).toEqual(expectedPlain);
+test('INI', () => {
+  const pathBefore = getPath('first.ini');
+  const pathAfter = getPath('second.ini');
+  expect(gendiff(pathBefore, pathAfter, 'diff')).toEqual(expectedDiff);
+  expect(gendiff(pathBefore, pathAfter, 'plain')).toEqual(expectedPlain);
+  expect(gendiff(pathBefore, pathAfter, 'json')).toEqual(expectedJSON);
 });
 
-const beforeI = ini.parse(fs.readFileSync(getPath('first.ini'), 'utf-8'));
-const afterI = ini.parse(fs.readFileSync(getPath('second.ini'), 'utf-8'));
-const treeI = parse(beforeI, afterI);
-
-test('INIdiff', () => {
-  expect(render('diff')(treeI)).toEqual(expectedDiff);
-});
-
-test('INIplain', () => {
-  expect(render('plain')(treeI)).toEqual(expectedPlain);
-});
-
-const beforeY = yaml.safeLoad(fs.readFileSync(getPath('first.yml'), 'utf-8'));
-const afterY = yaml.safeLoad(fs.readFileSync(getPath('second.yml'), 'utf-8'));
-const treeY = parse(beforeY, afterY);
-
-test('YMLdiff', () => {
-  expect(render('diff')(treeY)).toEqual(expectedDiff);
-});
-
-test('YMLplain', () => {
-  expect(render('plain')(treeY)).toEqual(expectedPlain);
-});
-
-test('JSONFormat', () => {
-  expect(render('json')(treeY)).toEqual(expectedJSON);
+test('YML', () => {
+  const pathBefore = getPath('first.yml');
+  const pathAfter = getPath('second.yml');
+  expect(gendiff(pathBefore, pathAfter, 'diff')).toEqual(expectedDiff);
+  expect(gendiff(pathBefore, pathAfter, 'plain')).toEqual(expectedPlain);
+  expect(gendiff(pathBefore, pathAfter, 'json')).toEqual(expectedJSON);
 });
