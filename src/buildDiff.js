@@ -1,15 +1,13 @@
 import _ from 'lodash';
 
 const getNodeType = (value, other) => {
-  const isNodeValue = _.isObject(value);
-  const isNodeyOther = _.isObject(other);
   if (!other) {
-    return isNodeValue ? 'node' : 'leaf';
+    return _.isObject(value) ? 'node' : 'leaf';
   }
-  if (isNodeValue && !isNodeyOther) {
+  if (_.isObject(value) && !_.isObject(other)) {
     return 'node/leaf';
   }
-  if (!isNodeValue && isNodeyOther) {
+  if (!_.isObject(value) && _.isObject(other)) {
     return 'leaf/node';
   }
   return 'leaf';

@@ -1,35 +1,17 @@
 import path from 'path';
-import fs from 'fs';
-import yaml from 'js-yaml';
-import ini from 'ini';
-import parse from './src/parsers.js';
-import getRender from './src/formatters/render.js';
-
-const parseActions = [
-  {
-    action: (pathToFile) => JSON.parse(fs.readFileSync(pathToFile)),
-    check: (pathToFile) => path.extname(pathToFile) === '.json',
-  },
-  {
-    action: (pathToFile) => yaml.safeLoad(fs.readFileSync(pathToFile)),
-    check: (pathToFile) => path.extname(pathToFile) === '.yml',
-  },
-  {
-    action: (pathToFile) => ini.parse(fs.readFileSync(pathToFile, 'utf-8')),
-    check: (pathToFile) => path.extname(pathToFile) === '.ini',
-  },
-];
-
-const getParseAction = (pathToFile) => parseActions.find(({ check }) => check(pathToFile));
+import parse from './src/parser.js';
+import getRender from './src/formatters/index.js';
+import buildDiff from './src/buildDiff.js';
 
 export default (pathBefore, pathAfter, format) => {
-  if (path.extname(pathBefore) !== path.extname(pathAfter)) {
-    return '!Err';
+  const beforeExt = path.extname(pathBefore);
+  const afterExt = path.extname(pathAfter);
+  if (beforeExt !== afterExt) {
+    throw new Error('Different file extensions');
   }
-  const { action } = getParseAction(pathBefore);
-  const before = action(pathBefore);
-  const after = action(pathAfter);
-  const ast = parse(before, after);
+  const before = parse(beforeExt, pathBefore);
+  const after = parse(afterExt, pathAfter);
+  const diff = buildDiff(before, after);
   const render = getRender(format);
-  return render(ast);
+  return render(diff);
 };
