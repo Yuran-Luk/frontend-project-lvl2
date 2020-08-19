@@ -16,7 +16,7 @@ const getNodeType = (value, other) => {
 const diff = (before, after) => {
   const beforeKeys = _.keys(before);
   const afterKeys = _.keys(after);
-  const keys = _.uniq([...beforeKeys, ...afterKeys]);
+  const keys = _.union(beforeKeys, afterKeys);
   const buildAst = keys.map((key) => {
     const node = {
       name: key,
