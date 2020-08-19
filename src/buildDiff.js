@@ -1,23 +1,14 @@
 import _ from 'lodash';
 
-const getNodeType = (value, other) => {
-  if (!other) {
-    return _.isObject(value) ? 'node' : 'leaf';
-  }
-  if (_.isObject(value) && !_.isObject(other)) {
-    return 'node/leaf';
-  }
-  if (!_.isObject(value) && _.isObject(other)) {
-    return 'leaf/node';
-  }
-  return 'leaf';
-};
+const getNodeType = (value) => (_.isObject(value) ? 'node' : 'leaf');
 
 const diff = (before, after) => {
   const beforeKeys = _.keys(before);
   const afterKeys = _.keys(after);
   const keys = _.union(beforeKeys, afterKeys);
   const buildAst = keys.map((key) => {
+    const beforeType = getNodeType(before[key]);
+    const afterType = getNodeType(after[key]);
     const node = {
       name: key,
       type: '',
@@ -25,7 +16,7 @@ const diff = (before, after) => {
     };
     if (!_.has(after, key)) {
       node.status = 'delete';
-      node.type = getNodeType(before[key]);
+      node.type = beforeType;
       if (node.type === 'node') {
         node.children = diff(before[key], before[key]);
       } else {
@@ -35,7 +26,7 @@ const diff = (before, after) => {
     }
     if (!_.has(before, key)) {
       node.status = 'add';
-      node.type = getNodeType(after[key]);
+      node.type = afterType;
       if (node.type === 'node') {
         node.children = diff(after[key], after[key]);
       } else {
@@ -51,7 +42,7 @@ const diff = (before, after) => {
     }
     if (_.isEqual(before[key], after[key])) {
       node.status = 'unchanged';
-      node.type = getNodeType(after[key]);
+      node.type = afterType;
       if (node.type === 'node') {
         node.children = diff({}, after[key]);
       } else {
@@ -60,7 +51,8 @@ const diff = (before, after) => {
       return node;
     }
     node.status = 'updated';
-    node.type = getNodeType(before[key], after[key]);
+    node.type = afterType === beforeType ? afterType
+      : `${beforeType}/${afterType}`;
     node.beforeValue = getNodeType(before[key]) === 'node'
       ? diff(before[key], before[key]) : before[key];
     node.afterValue = getNodeType(after[key]) === 'leaf'
