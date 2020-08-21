@@ -4,7 +4,6 @@ const getNodeType = (value) => (_.isObject(value) ? 'node' : 'leaf');
 
 const makeNodeActions = [
   {
-    status: 'unchanged',
     check: (beforeData, afterData) => _.isEqual(beforeData, afterData),
     mkNode: (name, cb, beforeData, afterData) => {
       const type = getNodeType(beforeData);
@@ -18,35 +17,30 @@ const makeNodeActions = [
     },
   },
   {
-    status: 'add',
-    check: (beforeData, afterData) => !beforeData,
+    check: (beforeData, afterData) => !beforeData || !afterData,
     mkNode: (name, cb, beforeData, afterData) => {
-      const type = getNodeType(afterData);
-      const dataType = type === 'node' ? 'children' : 'value';
+      const status = !beforeData ? 'add' : 'delete';
+      if (status === 'add') {
+        const typeAfter = getNodeType(afterData);
+        const afterDataType = typeAfter === 'node' ? 'children' : 'value';
+        return {
+          name,
+          type: typeAfter,
+          status: 'add',
+          [afterDataType]: typeAfter === 'node' ? cb(afterData, afterData) : afterData,
+        };
+      }
+      const typeBefore = getNodeType(beforeData);
+      const dataType = typeBefore === 'node' ? 'children' : 'value';
       return {
         name,
-        type,
-        status: 'add',
-        [dataType]: type === 'node' ? cb(afterData, afterData) : afterData,
-      };
-    },
-  },
-  {
-    status: 'delete',
-    check: (beforeData, afterData) => !afterData,
-    mkNode: (name, cb, beforeData, afterData) => {
-      const type = getNodeType(beforeData);
-      const dataType = type === 'node' ? 'children' : 'value';
-      return {
-        name,
-        type,
+        type: typeBefore,
         status: 'delete',
-        [dataType]: type === 'node' ? cb(beforeData, beforeData) : beforeData,
+        [dataType]: typeBefore === 'node' ? cb(beforeData, beforeData) : beforeData,
       };
     },
   },
   {
-    status: 'updated',
     check: (beforeData, afterData) => !_.isEqual(beforeData, afterData),
     mkNode: (name, cb, beforeData, afterData) => {
       const beforeType = getNodeType(beforeData);
