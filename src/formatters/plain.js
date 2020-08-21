@@ -21,8 +21,7 @@ export default (diff) => {
             return `Property '${path}${node.name}' was added with value: '${node.type === 'leaf' ? node.value : '[complex value]'}'`;
           case 'parent':
             return iter(node.children, `${path}${node.name}.`);
-          default:
-            throw new Error(`Error! '${node.status}' is invalid in node ${node.name}`);
+          default: throw new Error(`Error! '${node.status}' is invalid in node ${node.name}`);
         }
       });
     return plainRender.join('\n');
