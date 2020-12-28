@@ -1,7 +1,1 @@
 /node_modules/
-*.log
-dist
-.tern-port
-.idea
-files
-coverage

@@ -1,8 +1,0 @@
-Property 'common.setting2' was deleted
-Property 'common.setting3' was updated from 'true' to '[complex value]'
-Property 'common.setting6' was deleted
-Property 'common.follow' was added with value: 'false'
-Property 'common.setting5' was added with value: '[complex value]'
-Property 'group1.baz' was updated from 'bas' to 'bars'
-Property 'group1.nest' was updated from '[complex value]' to 'str'
-Property 'group3' was added with value: '[complex value]'

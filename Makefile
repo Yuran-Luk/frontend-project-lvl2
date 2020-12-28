@@ -4,9 +4,6 @@ install:
 publish:
 	npm publish --dry-run
 
-push:
-	git push -u origin master
-
 test:
 	npm test
 

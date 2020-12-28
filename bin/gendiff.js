@@ -1,14 +1,13 @@
 #!/usr/bin/env node
+/* eslint-disable import/extensions */
 import commander from 'commander';
 import diff from '../index.js';
 
-commander.version('0.0.1')
+commander.version('1.0.0')
   .description('Compares two configuration files and shows a difference.')
-  .option('-f, --format [type]', 'Output format')
-  .arguments('<firstConfig> <secondConfig>')
-  .option('-f, --format [type]', 'output format', 'diff')
-  .action((firstConfig, secondConfig) => {
-    console.log(diff(firstConfig, secondConfig, commander.format));
+  .arguments('<firstConfig>')
+  .action((firstConfig) => {
+    console.log(diff(firstConfig));
   });
 
 commander.parse(process.argv);
