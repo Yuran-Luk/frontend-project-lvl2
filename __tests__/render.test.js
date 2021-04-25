@@ -16,3 +16,9 @@ test('JSON', () => {
   const pathAfter = getPath('after.json');
   expect(gendiff(pathBefore, pathAfter)).toEqual(expectedDiff);
 });
+
+test('YML', () => {
+  const pathBefore = getPath('before.yml');
+  const pathAfter = getPath('after.yml');
+  expect(gendiff(pathBefore, pathAfter)).toEqual(expectedDiff);
+});

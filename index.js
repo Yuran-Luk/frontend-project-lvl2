@@ -1,6 +1,7 @@
-import fs from 'fs';
+import path from 'path';
 import _ from 'lodash';
 import render from './src/render.js';
+import parse from './utils/parse.js';
 
 const getDiff = (obj1, obj2) => {
   const keys = Object.keys({ ...obj1, ...obj2 });
@@ -31,8 +32,10 @@ const getDiff = (obj1, obj2) => {
 
 export default (filepath1, filepath2) => {
   const tabSize = 2;
-  const firstFile = JSON.parse(fs.readFileSync(filepath1));
-  const secondFile = JSON.parse(fs.readFileSync(filepath2));
+  const firstFileExt = path.extname(filepath1);
+  const secondFileExt = path.extname(filepath2);
+  const firstFile = parse(firstFileExt, filepath1);
+  const secondFile = parse(secondFileExt, filepath2);
   const filesDiff = getDiff(firstFile, secondFile);
   return render(filesDiff, tabSize);
 };

@@ -4,8 +4,11 @@ publish:
 test:
 	npm test
 
-json:
+jsonDiff:
 	gendiff __tests__/__fixtures__/before.json __tests__/__fixtures__/after.json
+
+ymlDiff:
+	gendiff __tests__/__fixtures__/before.yml __tests__/__fixtures__/after.yml
 
 test-coverage:
 	npm test -- --coverage --coverageProvider=v8
